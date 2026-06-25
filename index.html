@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RORY X | Cybernetic Retail Portal</title>
+    <!-- Tailwind CSS for high-performance styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Futuristic Tech Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#030303',
+                            panel: '#0a0a0c',
+                            accent: '#10b981', // Neon Emerald
+                            accentGlow: '#059669',
+                            blue: '#00f0ff',
+                            purple: '#8b5cf6',
+                            rose: '#f43f5e',
+                            textMuted: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modern Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(3, 3, 3, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.3);
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.6);
+        }
+
+        /* Ambient neon glowing backdrops */
+        .neon-glow-btn {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neon-glow-btn:hover {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Glassmorphic Cyber Panels */
+        .cyber-glass {
+            background: rgba(10, 10, 12, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Matrix particles canvas backdrop */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Fluid transitions for pages */
+        .page-transition {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Custom text gradient */
+        .cyber-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #10b981 50%, #00f0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Light mode theme overrides */
+        .light-mode {
+            --tw-bg-opacity: 1 !important;
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+        }
+        .light-mode .cyber-glass {
+            background: rgba(255, 255, 255, 0.8) !important;
+            border: 1px solid rgba(15, 23, 42, 0.08) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03) !important;
+        }
+        .light-mode .cyber-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #047857 50%, #0284c7 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+    </style>
+</head>
+<body class="bg-[#030303] text-slate-100 font-sans min-height-screen overflow-x-hidden antialiased">
+
+    <!-- Interactive Cyber Particle Background Canvas -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <!-- FLOATING NAVIGATION DOCK -->
+    <header class="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-4">
+        <nav class="max-w-7xl mx-auto cyber-glass rounded-2xl px-6 py-3 flex items-center justify-between transition-all duration-300">
+            <!-- Brand Logo with automatic local image / neon SVG fallback -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="relative w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-tr from-cyber-accent to-cyber-blue p-[1px] shadow-lg shadow-cyber-accent/20 overflow-hidden">
+                    <img src="RoryX.png" alt="Rory X" id="navLogo" onerror="this.style.opacity='0';" class="absolute inset-0 w-full h-full object-contain p-1 z-10 transition-opacity duration-300">
+                    <div class="w-full h-full bg-[#030303] rounded-[11px] flex items-center justify-center font-mono font-bold text-cyber-accent text-lg tracking-wider">RX</div>
+                </div>
+                <div class="hidden sm:block font-mono font-extrabold tracking-widest text-lg">
+                    RORY <span class="text-cyber-accent">X</span>
+                </div>
+            </div>
+
+            <!-- Page Selection Tabs -->
+            <ul class="hidden md:flex items-center gap-1 font-mono text-xs font-semibold tracking-wider">
+                <li>
+                    <button id="nav-home" onclick="navigateTo('home')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all duration-200">HOME</button>
+                </li>
+                <li>
+                    <button id="nav-shop" onclick="navigateTo('shop')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all duration-200">SHOP</button>
+                </li>
+                <li>
+                    <button id="nav-clothing" onclick="navigateTo('clothing')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all duration-200">CLOTHING & MERCH</button>
+                </li>
+                <li>
+                    <button id="nav-about" onclick="navigateTo('about')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all duration-200">ABOUT US</button>
+                </li>
+            </ul>
+
+            <!-- Navigation Actions Right Panel -->
+            <div class="flex items-center gap-3">
+                <!-- Live Stock Control Panel (Dropdown Button) -->
+                <div class="relative">
+                    <button onclick="toggleDropdown(event, 'stockDropdown')" id="stockBtn" class="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-mono text-xs font-bold bg-cyber-accent/10 hover:bg-cyber-accent/20 border border-cyber-accent/30 text-cyber-accent transition-all duration-300">
+                        <span class="w-2 h-2 rounded-full bg-cyber-accent animate-pulse"></span>
+                        <span>LIVE STOCK</span>
+                    </button>
+                    <!-- Floating Dropdown menu overlay -->
+                    <div id="stockDropdown" class="hidden absolute right-0 mt-3 w-56 cyber-glass rounded-xl shadow-2xl border border-white/5 overflow-hidden transition-all duration-300 font-mono text-xs">
+                        <div class="p-2 border-b border-white/5 bg-white/5 text-[10px] text-slate-400 tracking-wider">PUBLIC HUB</div>
+                        <button onclick="navigateTo('admin'); closeDropdowns();" class="w-full text-left px-4 py-3 hover:bg-white/5 transition-all text-slate-300 hover:text-white">⚙️ Admin Console</button>
+                        <button onclick="navigateTo('admin'); closeDropdowns();" class="w-full text-left px-4 py-3 hover:bg-white/5 border-t border-white/5 transition-all text-slate-300 hover:text-white">📊 Private Back-Office</button>
+                    </div>
+                </div>
+
+                <!-- Shopping Cart Action -->
+                <button onclick="toggleCartSidebar(true)" class="relative p-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-500 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                    <span id="cartCountBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-white rounded-full flex items-center justify-center font-mono text-[10px] font-bold">0</span>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleDisplayTheme()" id="themeBtn" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 text-slate-300 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN BODY PAGE CONTENTS -->
+    <main class="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
+        
+        <!-- PAGE CONTENT CONTAINER: HOME -->
+        <section id="page-home" class="page-transition block space-y-12">
+            <!-- Simulated holograph style video presentation link banner -->
+            <div class="relative rounded-3xl overflow-hidden p-8 border border-cyber-accent/30 bg-cyber-accent/5 backdrop-filter blur-md flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+                <div class="space-y-3 max-w-xl text-center md:text-left">
+                    <span class="inline-block px-3 py-1 rounded-full font-mono text-[10px] bg-cyber-accent/10 border border-cyber-accent/20 text-cyber-accent tracking-widest font-extrabold uppercase">MULTIMEDIA HUBS</span>
+                    <h2 class="text-2xl font-bold font-mono tracking-tight">🎬 WATCH THE EXCLUSIVE RORY X ARCHIVES</h2>
+                    <p class="text-sm text-slate-400">Unlock hand-crafted cinematic promotion, behind the scenes, and special product releases directly inside our shared cloud folder storage.</p>
+                </div>
+                <a href="https://drive.google.com/drive/folders/1jJ8mLFpPv08m2eNrLgzp218iNZRpZvHV?usp=sharing" target="_blank" class="neon-glow-btn bg-cyber-accent text-[#030303] hover:brightness-110 font-mono font-bold text-xs py-4 px-8 rounded-xl tracking-wider transition-all duration-200">
+                    OPEN DIRECTORY →
+                </a>
+            </div>
+
+            <!-- Main Interactive welcome glass box banner -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden cyber-glass shadow-2xl border border-white/5">
+                <div class="h-64 lg:h-auto min-h-[350px] relative overflow-hidden bg-[#030303] flex items-center justify-center">
+                    <!-- High Fidelity Inline SVG fallback for watchhold -->
+                    <svg class="absolute inset-0 w-full h-full text-slate-700/20 p-8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="0.5" stroke-dasharray="4 4" />
+                        <path d="M50 10V90M10 50H90" stroke="currentColor" stroke-width="0.2" />
+                        <rect x="35" y="35" width="30" height="30" rx="4" stroke="#10b981" stroke-width="0.5" class="animate-pulse" />
+                    </svg>
+                    <!-- Brand Welcome Image -->
+                    <img src="watchhold.jpeg" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-[#030303]/90 to-transparent z-15"></div>
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.15),transparent)] z-15"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                        <span class="text-cyber-accent font-mono text-xs font-bold tracking-widest mb-1">CRAFTED FOR UNIQUE BEINGS</span>
+                        <h3 class="text-3xl font-extrabold tracking-tight">THE APEX OF APPAREL</h3>
+                    </div>
+                </div>
+                <div class="p-8 lg:p-12 flex flex-col justify-center space-y-6">
+                    <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight cyber-gradient">WELCOME TO THE FUTURE OF RORY X</h1>
+                    <p class="text-base text-slate-400 leading-relaxed">
+                        We specialize in premium food and hydration formulations, custom personal technology, luxury wrist accessories, and exquisite design pieces. Explore the custom catalog using our high-speed virtual interface dock.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <button onclick="navigateTo('shop')" class="px-6 py-3.5 bg-cyber-accent text-[#030303] rounded-xl font-mono text-xs font-bold hover:brightness-110 tracking-widest transition-all">
+                            SHOP ESSENTIALS
+                        </button>
+                        <button onclick="navigateTo('clothing')" class="px-6 py-3.5 bg-white/5 border border-white/10 hover:bg-white/10 rounded-xl font-mono text-xs font-bold tracking-widest transition-all">
+                            CATALOG SELECTION
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Seller product focus banner -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden cyber-glass shadow-2xl border border-white/5">
+                <div class="p-8 lg:p-12 flex flex-col justify-center space-y-6 order-2 lg:order-1">
+                    <div class="inline-flex">
+                        <span class="px-3 py-1 rounded-full font-mono text-[10px] bg-cyber-blue/10 border border-cyber-blue/20 text-cyber-blue tracking-widest font-extrabold uppercase">BEST SELLING COMPONENT</span>
+                    </div>
+                    <h2 class="text-3xl lg:text-4xl font-extrabold tracking-tight">THE RORY X MULTI-DIAL WATCH</h2>
+                    <p class="text-base text-slate-400 leading-relaxed">
+                        Our flagship personal wrist device. Individually configured and hand-assembled upon order. Unique materials composition guarantees no two devices share the same structural pattern.
+                    </p>
+                    <div class="pt-4">
+                        <button onclick="navigateTo('clothing')" class="px-6 py-3.5 bg-cyber-blue text-[#030303] rounded-xl font-mono text-xs font-bold hover:brightness-110 tracking-widest transition-all">
+                            VIEW SPECIAL DETAILS
+                        </button>
+                    </div>
+                </div>
+                <div class="h-64 lg:h-auto min-h-[350px] relative overflow-hidden bg-[#030303] order-1 lg:order-2 flex items-center justify-center">
+                    <!-- High Fidelity Inline SVG fallback for watchown -->
+                    <svg class="absolute inset-0 w-full h-full text-slate-700/20 p-8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="30" stroke="#00f0ff" stroke-width="0.5" />
+                        <path d="M50 25V50L65 50" stroke="#00f0ff" stroke-width="0.75" stroke-linecap="round" />
+                        <circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="0.2" />
+                    </svg>
+                    <!-- Brand Watch Image -->
+                    <img src="watchown.png" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-tl from-[#030303]/90 to-transparent z-15"></div>
+                    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,240,255,0.15),transparent)] z-15"></div>
+                    <div class="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                        <span class="text-cyber-blue font-mono text-xs font-bold tracking-widest mb-1">LIMITED PRODUCTION CYCLES</span>
+                        <h3 class="text-3xl font-extrabold tracking-tight">INDIVIDUAL STRUCTURAL SIGNATURES</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE CONTENT CONTAINER: SHOP -->
+        <section id="page-shop" class="page-transition hidden space-y-10">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <h2 class="text-4xl font-extrabold tracking-tight cyber-gradient uppercase">CONSOLIDATED LAB SUPPLIES</h2>
+                <p class="text-sm text-slate-400 font-mono">Consumable formulations & raw physical containers configured for daily support operations.</p>
+            </div>
+
+            <!-- Responsive modern grid for key catalog products -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product Card: Dehydrated Water -->
+                <div class="product-card cyber-glass rounded-3xl p-6 border border-white/5 hover:border-cyber-accent/30 flex flex-col justify-between group transition-all duration-300" data-product-name="Dehydrated Water">
+                    <div>
+                        <!-- Animated HUD frame container with asset and fallback icon -->
+                        <div class="relative w-full h-48 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center overflow-hidden group-hover:border-cyber-accent/20 transition-all p-4">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.05),transparent)]"></div>
+                            <!-- Inline SVG Backup Graphic -->
+                            <svg class="absolute w-16 h-16 text-emerald-500/20 group-hover:text-cyber-accent/40 group-hover:scale-110 transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                <circle cx="12" cy="12" r="9" stroke-dasharray="3 3" />
+                            </svg>
+                            <img src="waterbottle.png" onerror="this.style.opacity='0'" class="absolute max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-105 transition-opacity duration-300 z-10">
+                        </div>
+                        <h3 class="mt-5 text-lg font-bold font-mono tracking-tight group-hover:text-cyber-accent transition-colors">Dehydrated Water</h3>
+                        <p class="text-sm font-bold text-slate-400 mt-1">£3.50</p>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="stock-tag-container text-center"></div>
+                        <button onclick="addItemToCart('Dehydrated Water', 3.50)" class="buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all">
+                            ADD TO DOCK
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card: Air (Custom Variants Selection) -->
+                <div class="product-card cyber-glass rounded-3xl p-6 border border-white/5 hover:border-cyber-accent/30 flex flex-col justify-between group transition-all duration-300" data-is-variant="true">
+                    <div>
+                        <div class="relative w-full h-48 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center overflow-hidden group-hover:border-cyber-accent/20 transition-all p-4">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,240,255,0.05),transparent)]"></div>
+                            <!-- Inline SVG Backup Graphic -->
+                            <svg class="absolute w-16 h-16 text-cyan-500/20 group-hover:text-cyber-blue/40 group-hover:scale-110 transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M12 8a3 3 0 0 0-3 3h6a3 3 0 0 0-3-3z" stroke-dasharray="2 2" />
+                            </svg>
+                            <img src="air.png" onerror="this.style.opacity='0'" class="absolute max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-105 transition-opacity duration-300 z-10">
+                        </div>
+                        <h3 class="mt-5 text-lg font-bold font-mono tracking-tight group-hover:text-cyber-blue transition-colors">Premium Atmospheric Air</h3>
+                        <p id="airPriceLabel" class="text-sm font-bold text-slate-400 mt-1">£5.00</p>
+                        
+                        <!-- Premium Variant selection styling -->
+                        <select id="airSize" onchange="updateAirPrice()" class="w-full mt-3 px-3 py-2 rounded-lg bg-[#030303] text-xs font-mono font-bold text-slate-300 border border-white/10 outline-none focus:border-cyber-accent transition-all">
+                            <option value="5.00">Small Volume - £5.00</option>
+                            <option value="10.00">Medium Volume - £10.00</option>
+                            <option value="15.00">Heavy Carrier - £15.00</option>
+                        </select>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="stock-tag-container text-center" id="airStockContainer"></div>
+                        <button id="airBuyBtn" onclick="addAirToCart()" class="buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all">
+                            ADD TO DOCK
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card: Unlit Fire -->
+                <div class="product-card cyber-glass rounded-3xl p-6 border border-white/5 hover:border-cyber-accent/30 flex flex-col justify-between group transition-all duration-300" data-product-name="Unlit Fire">
+                    <div>
+                        <div class="relative w-full h-48 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center overflow-hidden group-hover:border-cyber-accent/20 transition-all p-4">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(244,63,94,0.05),transparent)]"></div>
+                            <!-- Inline SVG Backup Graphic -->
+                            <svg class="absolute w-16 h-16 text-rose-500/20 group-hover:text-cyber-rose/40 group-hover:scale-110 transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2c0 0-4 4.5-4 8.5a4 4 0 0 0 8 0c0-4-4-8.5-4-8.5z" />
+                                <path d="M12 14v4" />
+                            </svg>
+                            <img src="unlitfire.png" onerror="this.style.opacity='0'" class="absolute max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-105 transition-opacity duration-300 z-10">
+                        </div>
+                        <h3 class="mt-5 text-lg font-bold font-mono tracking-tight group-hover:text-cyber-rose transition-colors">Unlit Fire Starter</h3>
+                        <p class="text-sm font-bold text-slate-400 mt-1">£7.85</p>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="stock-tag-container text-center"></div>
+                        <button onclick="addItemToCart('Unlit Fire', 7.85)" class="buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all">
+                            ADD TO DOCK
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card: Boxes -->
+                <div class="product-card cyber-glass rounded-3xl p-6 border border-white/5 hover:border-cyber-accent/30 flex flex-col justify-between group transition-all duration-300" data-product-name="Boxes">
+                    <div>
+                        <div class="relative w-full h-48 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center overflow-hidden group-hover:border-cyber-accent/20 transition-all p-4">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05),transparent)]"></div>
+                            <!-- Inline SVG Backup Graphic -->
+                            <svg class="absolute w-16 h-16 text-violet-500/20 group-hover:text-cyber-purple/40 group-hover:scale-110 transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <path d="M9 3v18M15 3v18" stroke-dasharray="2 2" />
+                            </svg>
+                            <img src="Boxes.png" onerror="this.style.opacity='0'" class="absolute max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-105 transition-opacity duration-300 z-10">
+                        </div>
+                        <h3 class="mt-5 text-lg font-bold font-mono tracking-tight group-hover:text-cyber-purple transition-colors">Empty Containment Box</h3>
+                        <p class="text-sm font-bold text-slate-400 mt-1">£19.75</p>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="stock-tag-container text-center"></div>
+                        <button onclick="addItemToCart('Boxes', 19.75)" class="buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all">
+                            ADD TO DOCK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE CONTENT CONTAINER: CLOTHING & ACCESSORIES -->
+        <section id="page-clothing" class="page-transition hidden space-y-10">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <h2 class="text-4xl font-extrabold tracking-tight cyber-gradient uppercase">RORY X MERCH & GARMENTS</h2>
+                <p class="text-sm text-slate-400 font-mono">Premium grade physical weaves, accessories, and structural wearables.</p>
+            </div>
+
+            <!-- Sleek Tab Filter mimicking separate subpages dynamically -->
+            <div class="flex items-center justify-center gap-2 font-mono text-[10px] sm:text-xs">
+                <button onclick="changeClothingPage(1)" id="clothing-tab-1" class="px-4 py-2.5 rounded-xl border border-white/5 bg-white/5 active tracking-wider font-extrabold hover:text-white transition-all">PAGE 01</button>
+                <button onclick="changeClothingPage(2)" id="clothing-tab-2" class="px-4 py-2.5 rounded-xl border border-white/5 bg-white/5 tracking-wider font-extrabold hover:text-white transition-all">PAGE 02</button>
+                <button onclick="changeClothingPage(3)" id="clothing-tab-3" class="px-4 py-2.5 rounded-xl border border-white/5 bg-white/5 tracking-wider font-extrabold hover:text-white transition-all">PAGE 03</button>
+            </div>
+
+            <!-- Dynamic products container loaded by script based on selection -->
+            <div id="clothingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Loaded dynamically by function renderClothingCatalog() -->
+            </div>
+        </section>
+
+        <!-- PAGE CONTENT CONTAINER: ABOUT US -->
+        <section id="page-about" class="page-transition hidden space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <h2 class="text-4xl font-extrabold tracking-tight cyber-gradient uppercase">RORY X ADMINISTRATIVE COUNCIL</h2>
+                <p class="text-sm text-slate-400 font-mono">Meet the founders, creators, and division heads driving the network forward.</p>
+            </div>
+
+            <!-- Roster cards with modern profile layout and cool hover details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Rory -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-cyber-accent/30 transition-all duration-300 group">
+                    <div class="p-6 flex items-center gap-5">
+                        <!-- Custom layout: uses rory.PNG with a stylized initial fallback if not found -->
+                        <div class="w-16 h-16 rounded-2xl bg-cyber-accent/10 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-cyber-accent shrink-0">
+                            <span class="absolute">R</span>
+                            <img src="rory.PNG" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Rory</h3>
+                            <p class="text-xs text-cyber-accent font-mono">Chief Executive Officer</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-white/5 bg-white/5 text-sm text-slate-400">
+                        Primary owner and strategic founder of the Rory X multi-channel retail brand.
+                    </div>
+                </div>
+
+                <!-- Kyen -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-cyber-blue/30 transition-all duration-300 group">
+                    <div class="p-6 flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-cyber-blue/10 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-cyber-blue shrink-0">
+                            <span class="absolute">K</span>
+                            <img src="kyen.PNG" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Kyen</h3>
+                            <p class="text-xs text-cyber-blue font-mono">Creative Director & Lead Developer</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-white/5 bg-white/5 text-sm text-slate-400">
+                        Web architecture supervisor, primary designer, and social broadcast supervisor.
+                    </div>
+                </div>
+
+                <!-- Oliver -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-cyber-purple/30 transition-all duration-300 group">
+                    <div class="p-6 flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-cyber-purple/10 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-cyber-purple shrink-0">
+                            <span class="absolute">O</span>
+                            <img src="oliver.PNG" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Oliver</h3>
+                            <p class="text-xs text-cyber-purple font-mono">General Partner & Promotion Head</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-white/5 bg-white/5 text-sm text-slate-400">
+                        Corporate co-owner, driving global broadcast partnerships and promotional releases.
+                    </div>
+                </div>
+
+                <!-- Miki -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-white/10 transition-all duration-300 group">
+                    <div class="p-6 flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-slate-200 shrink-0">
+                            <span class="absolute">M</span>
+                            <img src="miki.PNG" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Miki</h3>
+                            <p class="text-xs text-slate-400 font-mono">Innovation Strategy Officer</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-white/5 bg-white/5 text-sm text-slate-400">
+                        Supplying fresh concept ideas and collaborative campaign parameters.
+                    </div>
+                </div>
+
+                <!-- Emily -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-white/10 transition-all duration-300 group">
+                    <div class="p-6 flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-slate-200 shrink-0">
+                            <span class="absolute">E</span>
+                            <img src="emily.PNG" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Emily</h3>
+                            <p class="text-xs text-slate-400 font-mono">Marketing Specialist</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-white/5 bg-white/5 text-sm text-slate-400">
+                        Coordinating structural social reach programs and campaign scheduling.
+                    </div>
+                </div>
+
+                <!-- Harry -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-orange-500/30 transition-all duration-300 group">
+                    <div class="p-6 flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-orange-500/10 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-orange-500 shrink-0">
+                            <span class="absolute">H</span>
+                            <img src="Harry.png" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Harry</h3>
+                            <p class="text-xs text-orange-500 font-mono">Corporate Sales Executive</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-white/5 bg-white/5 text-sm text-slate-400">
+                        Account acquisition executive, conversion architect, and professional ginger.
+                    </div>
+                </div>
+
+                <!-- Sophie -->
+                <div class="cyber-glass rounded-3xl overflow-hidden border border-white/5 hover:border-cyber-rose/30 transition-all duration-300 group opacity-60">
+                    <div class="p-6 flex items-center gap-5">
+                        <div class="w-16 h-16 rounded-2xl bg-cyber-rose/10 border border-white/5 relative overflow-hidden flex items-center justify-center font-mono text-2xl font-bold text-cyber-rose shrink-0">
+                            <span class="absolute">S</span>
+                            <img src="NOIMAGE.PNG" onerror="this.style.opacity='0'" class="absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300">
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold line-through">Sophie</h3>
+                            <p class="text-xs text-cyber-rose font-mono">Fired (Relieved of Duty)</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-cyber-rose/15 bg-cyber-rose/5 text-sm text-slate-400">
+                        No longer linked to system administrative controls or creative functions.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE CONTENT CONTAINER: PAY / CHECKOUT -->
+        <section id="page-pay" class="page-transition hidden max-w-lg mx-auto space-y-8">
+            <div class="cyber-glass rounded-3xl p-8 border border-white/5 shadow-2xl relative">
+                <!-- Floating geometric hud details -->
+                <div class="absolute top-4 right-4 font-mono text-[9px] text-cyber-accent tracking-widest font-bold">SECURE CHANNEL STATUS: OK</div>
+                
+                <div class="text-center space-y-2 pb-6 border-b border-white/5">
+                    <div id="checkoutItemLabel" class="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">PRODUCT RESERVATION DOCK</div>
+                    <h2 id="checkoutItemName" class="text-2xl font-extrabold tracking-tight">Rory X Order Terminal</h2>
+                    <div id="checkoutItemPrice" class="text-3xl font-extrabold text-cyber-accent tracking-tight mt-1">£0.00</div>
+                </div>
+
+                <div class="space-y-4 py-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-mono text-[10px] text-slate-400 mb-1">FIRST NAME</label>
+                            <input type="text" id="fName" placeholder="Rory" class="w-full px-4 py-3 rounded-xl bg-[#030303] text-sm text-white border border-white/10 outline-none focus:border-cyber-accent transition-all">
+                        </div>
+                        <div>
+                            <label class="block font-mono text-[10px] text-slate-400 mb-1">LAST NAME</label>
+                            <input type="text" id="lName" placeholder="X" class="w-full px-4 py-3 rounded-xl bg-[#030303] text-sm text-white border border-white/10 outline-none focus:border-cyber-accent transition-all">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-slate-400 mb-1">ACADEMIC TUTOR GROUP</label>
+                        <input type="text" id="tutor" placeholder="e.g. 8HMR" class="w-full px-4 py-3 rounded-xl bg-[#030303] text-sm text-white border border-white/10 outline-none focus:border-cyber-accent transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block font-mono text-[10px] text-slate-400 mb-1">PROMOTION CODE</label>
+                        <input type="text" id="discountCode" oninput="checkDiscountCode()" placeholder="ENTER CODE (e.g. FREE10)" class="w-full px-4 py-3 rounded-xl bg-[#030303] text-sm font-mono text-white border border-white/10 outline-none focus:border-cyber-accent transition-all uppercase">
+                        <p id="discountMessage" class="hidden text-xs font-mono font-bold mt-2"></p>
+                    </div>
+                </div>
+
+                <!-- Mock digital wallets block -->
+                <div class="space-y-3 pt-6 border-t border-white/5">
+                    <button class="w-full py-3.5 rounded-xl bg-white text-slate-900 font-extrabold text-sm tracking-wider flex items-center justify-center gap-2 opacity-50 cursor-not-allowed">
+                        <span>Apple Pay & Google Pay Unavailable</span>
+                    </button>
+
+                    <!-- Mock Custom credit card setup -->
+                    <div class="space-y-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <div class="flex items-center justify-between text-xs font-mono">
+                            <span class="text-slate-400">🔒 DEBT CARDS</span>
+                            <span class="text-cyber-rose">SYSTEM RE-ROUTED</span>
+                        </div>
+                        <input type="text" disabled placeholder="CARD PAYMENTS CURRENTLY OFFLINE" class="w-full px-4 py-3 rounded-xl bg-[#030303]/40 text-xs font-mono border border-white/5 text-center text-slate-400 outline-none cursor-not-allowed">
+                    </div>
+
+                    <!-- Direct cash checkout option -->
+                    <button onclick="startPayment('Cash')" class="w-full py-4 rounded-xl bg-cyber-accent hover:bg-cyber-accentGlow text-[#030303] font-mono font-extrabold text-xs tracking-widest transition-all">
+                        💵 PAY WITH DIRECT CASH IN HAND
+                    </button>
+                    
+                    <button onclick="navigateTo('shop')" class="w-full py-3 rounded-xl border border-white/10 hover:bg-white/5 text-slate-400 hover:text-white font-mono text-[10px] tracking-wider transition-all">
+                        ← RETURN TO SHOP FLOOR
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE CONTENT CONTAINER: ADMIN PORTAL -->
+        <section id="page-admin" class="page-transition hidden space-y-8">
+            <!-- Cyber gate login HUD -->
+            <div id="adminGate" class="max-w-md mx-auto cyber-glass rounded-3xl p-8 border border-white/5 shadow-2xl space-y-6">
+                <div class="text-center space-y-2">
+                    <div class="w-12 h-12 rounded-2xl bg-cyber-rose/10 flex items-center justify-center text-cyber-rose mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-bold">ADMIN CORE PORTAL</h2>
+                    <p class="text-xs text-slate-400 font-mono">Authorization token required to adjust catalog properties and order lists.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <input type="email" id="adminEmail" placeholder="ENTER ADMIN EMAIL" class="w-full px-4 py-3 rounded-xl bg-[#030303] text-xs font-mono text-white border border-white/10 outline-none focus:border-cyber-rose transition-all">
+                    <input type="password" id="adminPassword" placeholder="ENTER PORTAL KEY" class="w-full px-4 py-3 rounded-xl bg-[#030303] text-xs font-mono text-white border border-white/10 outline-none focus:border-cyber-rose transition-all" onkeydown="if(event.key === 'Enter') attemptAdminLogin()">
+                    <p id="adminErrorMsg" class="hidden text-xs font-mono font-bold text-cyber-rose text-center"></p>
+                    <button onclick="attemptAdminLogin()" class="w-full py-3 bg-cyber-rose text-white rounded-xl font-mono text-xs font-bold hover:bg-rose-600 transition-all">
+                        REQUEST SECURE ACCESS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Authentic Back-Office Panel -->
+            <div id="adminPanel" class="hidden space-y-8">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/5">
+                    <div>
+                        <h2 class="text-2xl font-extrabold font-mono tracking-tight text-white uppercase">SYSTEM OPERATOR DOCK</h2>
+                        <p class="text-xs text-slate-400 font-mono">Adjust live stock counters & manage real-time client transaction records.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="handleClearLogs()" class="px-4 py-2 rounded-xl bg-cyber-rose/10 hover:bg-cyber-rose/20 border border-cyber-rose/20 text-cyber-rose font-mono text-[10px] font-bold transition-all">
+                            CLEAR LOGS
+                        </button>
+                        <button onclick="logoutAdmin()" class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 font-mono text-[10px] font-bold transition-all">
+                            DISCONNECT
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Live Stock configuration forms -->
+                    <div class="cyber-glass rounded-3xl p-6 border border-white/5 space-y-6">
+                        <h3 class="text-lg font-bold font-mono tracking-tight text-cyber-accent">LIVE CATALOG VALUES</h3>
+                        <form id="inventoryForm" onsubmit="saveInventorySettings(event)" class="space-y-6 max-h-[50vh] overflow-y-auto pr-2">
+                            <div class="space-y-3">
+                                <div class="font-mono text-[10px] text-slate-500 tracking-wider">LAB DISPENSARY</div>
+                                <div id="admin-dispensary" class="space-y-3"></div>
+
+                                <div class="font-mono text-[10px] text-slate-500 tracking-wider pt-4">GARMENTS DIVISION</div>
+                                <div id="admin-clothing" class="space-y-3"></div>
+
+                                <div class="font-mono text-[10px] text-slate-500 tracking-wider pt-4">CARRY GEAR & MERCHANDISE</div>
+                                <div id="admin-merch" class="space-y-3"></div>
+                            </div>
+
+                            <div class="flex items-center gap-3 pt-4 border-t border-white/5">
+                                <button type="button" onclick="resetStockDefaults()" class="flex-1 py-3 bg-white/5 hover:bg-white/10 rounded-xl font-mono text-xs font-bold transition-all">
+                                    RESET TO DEFAULT
+                                </button>
+                                <button type="submit" class="flex-1 py-3 bg-cyber-accent text-[#030303] rounded-xl font-mono text-xs font-bold hover:brightness-110 transition-all">
+                                    SAVE LIVE DOCKS
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Client logs list -->
+                    <div class="cyber-glass rounded-3xl p-6 border border-white/5 space-y-6 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-bold font-mono tracking-tight text-cyber-blue">ACTIVE TRANSACTIONS HUD</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left font-mono text-xs">
+                                    <thead>
+                                        <tr class="border-b border-white/5 text-[10px] text-slate-400">
+                                            <th class="py-3 px-2">CUSTOMER</th>
+                                            <th class="py-3 px-2">ORDER</th>
+                                            <th class="py-3 px-2">TUTOR</th>
+                                            <th class="py-3 px-2 text-right">TIME</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminOrderList">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING SHOPPING CART SIDEBAR (HUD DRAWER) -->
+    <div id="cartSidebar" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-[#0a0a0c]/95 border-l border-white/10 backdrop-filter blur-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+        <div class="p-6 flex items-center justify-between border-b border-white/5">
+            <h3 class="text-lg font-extrabold font-mono tracking-tight flex items-center gap-2">
+                <span>🛒 CART INVENTORY</span>
+                <span id="cartCountLabel" class="text-xs bg-amber-500/15 border border-amber-500/30 text-amber-500 px-2 py-0.5 rounded-full">0</span>
+            </h3>
+            <button onclick="toggleCartSidebar(false)" class="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Scrollable items box -->
+        <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Rendered dynamically by script -->
+        </div>
+
+        <!-- Calculations panel -->
+        <div class="p-6 border-t border-white/5 bg-white/5 space-y-4">
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-slate-400 font-mono text-xs">SUM TOTAL</span>
+                <span id="cartTotalLabel" class="text-xl font-bold font-mono text-amber-500">£0.00</span>
+            </div>
+            <button onclick="checkoutCart()" class="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-[#030303] font-mono font-extrabold text-xs tracking-widest transition-all">
+                COMMIT RESERVATIONS →
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN FOOTER FRAME -->
+    <footer class="border-t border-white/5 bg-white/[0.02] py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left space-y-2">
+                <p class="text-xs text-slate-400">© 2026 RORY X CORPORATION. INTEGRAL NETWORK CONTROLS REGISTERED.</p>
+                <p class="text-[10px] text-slate-500 font-mono">SUPPORT: RORYX.COM@HOTMAIL.COM | ACTIVE PROTOCOL: STANDBY</p>
+            </div>
+            
+            <!-- Real-time formatted cyber-style social navigation buttons using original assets -->
+            <div class="flex items-center gap-4">
+                <a href="https://www.tiktok.com/@roryx.com" target="_blank" class="p-2 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-all text-xs text-slate-400 hover:text-white font-mono flex items-center gap-2">
+                    <img src="tiktokimage.png" onerror="this.style.display='none'" class="w-4 h-4 object-contain"> TikTok
+                </a>
+                <a href="https://www.instagram.com/roryx.com75/" target="_blank" class="p-2 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-all text-xs text-slate-400 hover:text-white font-mono flex items-center gap-2">
+                    <img src="instagramimage.svg" onerror="this.style.display='none'" class="w-4 h-4 object-contain"> Instagram
+                </a>
+                <a href="https://www.youtube.com/channel/UC2tOn7rCPzN3jH5xoDFV5Fg" target="_blank" class="p-2 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-all text-xs text-slate-400 hover:text-white font-mono flex items-center gap-2">
+                    <img src="youtubeimage.png" onerror="this.style.display='none'" class="w-4 h-4 object-contain"> YouTube
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GLOWING FLOATING CUSTOM HUD NOTIFICATIONS (Toast Replacement) -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-[9999] space-y-3 pointer-events-none max-w-sm w-full px-4">
+        <!-- Rendered by window.showNotification() -->
+    </div>
+
+    <!-- EXPERT SCRIPTS INJECTED -->
+    <script>
+        // --- Static Blueprint Database Definition ---
+        const catalogBlueprint = [
+            // Shop Segment
+            { name: "Dehydrated Water", defaultStock: 15, group: "shop", price: 3.50, assetType: 'water' },
+            { name: "Air (Small)", defaultStock: 10, group: "shop", price: 5.00, assetType: 'air' },
+            { name: "Air (Medium)", defaultStock: 10, group: "shop", price: 10.00, assetType: 'air' },
+            { name: "Air (Large)", defaultStock: 5, group: "shop", price: 15.00, assetType: 'air' },
+            { name: "Unlit Fire", defaultStock: 8, group: "shop", price: 7.85, assetType: 'fire' },
+            { name: "Boxes", defaultStock: 20, group: "shop", price: 19.75, assetType: 'box' },
+            
+            // Clothing Segment Page 1
+            { name: "Rory X Hat", defaultStock: 12, group: "clothing", page: 1, price: 10.00, img: "Hat.png", fallbackEmoji: "🧢", fallbackColor: "text-blue-500/20" },
+            { name: "Rory X T-Shirt", defaultStock: 15, group: "clothing", page: 1, price: 12.00, img: "Shirtfront.jpeg", fallbackEmoji: "👕", fallbackColor: "text-emerald-500/20" },
+            { name: "Rory X Phone Case", defaultStock: 20, group: "accessories", page: 1, price: 9.00, img: "phonecase.png", fallbackEmoji: "📱", fallbackColor: "text-purple-500/20" },
+            { name: "Rory X Pin Badge", defaultStock: 40, group: "accessories", page: 1, price: 2.50, img: "pin.png", fallbackEmoji: "🏵️", fallbackColor: "text-yellow-500/20" },
+            { name: "Air Freshener", defaultStock: 30, group: "accessories", page: 1, price: 4.50, img: "airfresh.png", fallbackEmoji: "🌲", fallbackColor: "text-teal-500/20" },
+            { name: "Face Mask", defaultStock: 25, group: "accessories", page: 1, price: 5.00, img: "mask.png", fallbackEmoji: "😷", fallbackColor: "text-rose-500/20" },
+            
+            // Clothing Segment Page 2
+            { name: "Rory X Unisex Joggers (Black)", defaultStock: 12, group: "clothing", page: 2, price: 15.00, img: "Joggers (Black).png", fallbackEmoji: "👖", fallbackColor: "text-slate-500/20" },
+            { name: "Rory X Unisex Joggers (White)", defaultStock: 12, group: "clothing", page: 2, price: 15.00, img: "Joggers (White).png", fallbackEmoji: "👖", fallbackColor: "text-slate-300/20" },
+            { name: "Rory X Socks (Black)", defaultStock: 50, group: "clothing", page: 2, price: 5.00, img: "Socks (Black).png", fallbackEmoji: "🧦", fallbackColor: "text-zinc-600/20" },
+            { name: "Rory X Socks (White)", defaultStock: 50, group: "clothing", page: 2, price: 5.00, img: "Socks (White).png", fallbackEmoji: "🧦", fallbackColor: "text-zinc-300/20" },
+            { name: "Rory X Sticker", defaultStock: 100, group: "accessories", page: 2, price: 3.00, img: "RoryXSticker.png", fallbackEmoji: "🏷️", fallbackColor: "text-amber-500/20" },
+            { name: "Rory X Hockey Puck", defaultStock: 15, group: "accessories", page: 2, price: 25.00, img: "Hockey.png", fallbackEmoji: "🏒", fallbackColor: "text-orange-500/20" },
+            { name: "Rory X Medium Ring", defaultStock: 15, group: "accessories", page: 2, price: 3.00, img: "ring.png", fallbackEmoji: "💍", fallbackColor: "text-cyan-500/20" },
+            { name: "Rory X Shower Curtain", defaultStock: 5, group: "accessories", page: 2, price: 30.00, img: "Shower.png", fallbackEmoji: "🚿", fallbackColor: "text-indigo-500/20" },
+            { name: "Rory X 10oz glass", defaultStock: 30, group: "accessories", page: 2, price: 10.00, img: "10ozglass.png", fallbackEmoji: "🥛", fallbackColor: "text-blue-400/20" },
+            { name: "Rory X Mug (3 Designs)", defaultStock: 24, group: "accessories", page: 2, price: 7.00, img: "mug 1.png", isMugSlider: true, fallbackEmoji: "☕", fallbackColor: "text-amber-700/20" },
+            
+            // Clothing Segment Page 3
+            { name: "Rory X Hoodie", defaultStock: 25, group: "clothing", page: 3, price: 15.00, img: "Hoodie1,2.png", fallbackEmoji: "🧥", fallbackColor: "text-teal-600/20" },
+            { name: "Rory X Jewelry Box", defaultStock: 15, group: "accessories", page: 3, price: 15.00, img: "Jewelry Box.png", fallbackEmoji: "📦", fallbackColor: "text-amber-600/20" }
+        ];
+
+        // --- Core Web Application States ---
+        let currentRoute = 'home';
+        let cart = [];
+        let liveStock = {};
+        let databaseOrders = [];
+        let activeClothingPage = 1;
+        let selectedMugIndex = 0;
+        let activePaymentProduct = null;
+
+        // --- Helper: Retrieve matching visual asset path ---
+        function getProductImage(name) {
+            if (name.includes("Air")) return "air.png";
+            const item = catalogBlueprint.find(x => x.name === name);
+            if (item) {
+                if (item.isMugSlider) return `mug ${selectedMugIndex + 1}.png`;
+                if (item.img) return item.img;
+                if (item.assetType === 'water') return 'waterbottle.png';
+                if (item.assetType === 'fire') return 'unlitfire.png';
+                if (item.assetType === 'box') return 'Boxes.png';
+            }
+            return "";
+        }
+
+        // --- Custom Interactive Cyber-Notification Panel ---
+        function showHUDNotification(title, msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            const colorClass = type === 'success' ? 'border-cyber-accent bg-cyber-accent/5 text-cyber-accent' 
+                             : type === 'info' ? 'border-cyber-blue bg-cyber-blue/5 text-cyber-blue'
+                             : 'border-cyber-rose bg-cyber-rose/5 text-cyber-rose';
+            
+            toast.className = `p-4 rounded-2xl border ${colorClass} backdrop-filter blur-lg shadow-xl flex flex-col gap-1 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
+            toast.innerHTML = `
+                <div class="font-mono text-xs font-extrabold uppercase tracking-widest">${title}</div>
+                <div class="text-xs text-slate-300">${msg}</div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation frame safely
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- Dynamic Floating HUD Particle Background Engine ---
+        function setupMatrixParticles() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 0.4 - 0.2;
+                    this.speedY = Math.random() * 0.4 - 0.2;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = document.body.classList.contains('light-mode') ? '#10b981' : '#00f0ff';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Draw cool faint cyber grid overlay
+                ctx.strokeStyle = document.body.classList.contains('light-mode') ? 'rgba(0,0,0,0.01)' : 'rgba(255,255,255,0.02)';
+                ctx.lineWidth = 1;
+                const gridSize = 80;
+                for (let x = 0; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // --- Client Navigation Routing Architecture ---
+        function navigateTo(targetRoute) {
+            const pages = ['home', 'shop', 'clothing', 'about', 'pay', 'admin'];
+            pages.forEach(p => {
+                const element = document.getElementById(`page-${p}`);
+                if (element) {
+                    element.classList.add('hidden');
+                    element.classList.remove('block');
+                }
+                // Reset active tabs navigation
+                const tabButton = document.getElementById(`nav-${p}`);
+                if (tabButton) {
+                    tabButton.classList.remove('text-cyber-accent', 'text-cyber-blue', 'text-white', 'bg-white/5');
+                    tabButton.classList.add('text-slate-400');
+                }
+            });
+
+            const activePage = document.getElementById(`page-${targetRoute}`);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+                activePage.classList.add('block');
+                // Trigger scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            const activeTab = document.getElementById(`nav-${targetRoute}`);
+            if (activeTab) {
+                activeTab.classList.remove('text-slate-400');
+                activeTab.classList.add('text-cyber-accent', 'bg-white/5');
+            }
+
+            currentRoute = targetRoute;
+            closeDropdowns();
+        }
+
+        // --- Theme Engine Setup ---
+        function toggleDisplayTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            const logo = document.getElementById('navLogo');
+            
+            body.classList.toggle('light-mode');
+            
+            if(body.classList.contains('light-mode')) {
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+                `;
+                logo.src = "roryxlite.png";
+                localStorage.setItem('roryx-theme', 'light');
+                showHUDNotification('HYPERVISOR COUPLING', 'Platinum Light Mode Engaged', 'info');
+            } else {
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                    </svg>
+                `;
+                logo.src = "RoryX.png";
+                localStorage.setItem('roryx-theme', 'dark');
+                showHUDNotification('HYPERVISOR COUPLING', 'Obsidian Cyber Mode Engaged', 'info');
+            }
+        }
+
+        // --- Floating Dropdowns handlers ---
+        function toggleDropdown(event, dropdownId) {
+            event.stopPropagation();
+            const element = document.getElementById(dropdownId);
+            const isHidden = element.classList.contains('hidden');
+            closeDropdowns();
+            if (isHidden) {
+                element.classList.remove('hidden');
+            }
+        }
+
+        // --- Global Dropdown Dismiss Engine ---
+        function closeDropdowns() {
+            document.getElementById('stockDropdown').classList.add('hidden');
+        }
+
+        document.addEventListener('click', closeDropdowns);
+
+        // --- Atmospheric Air Variant price handler ---
+        function updateAirPrice() {
+            const dropdown = document.getElementById('airSize');
+            const price = parseFloat(dropdown.value).toFixed(2);
+            document.getElementById('airPriceLabel').innerText = "£" + price;
+            checkLiveStock();
+        }
+
+        // --- Dynamic Live Stock Client Synchronizer ---
+        async function checkLiveStock() {
+            try {
+                // Production request
+                const response = await fetch('/api/get-stock?t=' + Date.now());
+                if (response.ok) {
+                    liveStock = await response.json();
+                } else {
+                    throw new Error('Fallback simulation engaged');
+                }
+            } catch (err) {
+                // Simulated database storage fallback for sandboxed/offline environments
+                const fallbackData = localStorage.getItem('roryx-livestock');
+                if (fallbackData) {
+                    liveStock = JSON.parse(fallbackData);
+                } else {
+                    // Populate clean defaults
+                    const defaultMap = {};
+                    catalogBlueprint.forEach(item => {
+                        defaultMap[item.name] = item.defaultStock;
+                    });
+                    localStorage.setItem('roryx-livestock', JSON.stringify(defaultMap));
+                    liveStock = defaultMap;
+                }
+            }
+
+            applyStockUIToPage();
+        }
+
+        function applyStockUIToPage() {
+            // 1. Process regular items
+            const standardCards = document.querySelectorAll('[data-product-name]');
+            standardCards.forEach(card => {
+                const name = card.getAttribute('data-product-name');
+                const btn = card.querySelector('.buy-btn') || card.querySelector('.buy-now-btn');
+                const tagBox = card.querySelector('.stock-tag-container');
+
+                if (liveStock && Object.prototype.hasOwnProperty.call(liveStock, name)) {
+                    const count = parseInt(liveStock[name]);
+                    applyStockTags(count, btn, tagBox);
+                }
+            });
+
+            // 2. Process custom variable air canisters
+            const airDropdown = document.getElementById('airSize');
+            if (airDropdown) {
+                const currentSelectionText = airDropdown.options[airDropdown.selectedIndex].text;
+                let volumeSizeKey = "Air (Small)";
+                if (currentSelectionText.includes("Medium")) volumeSizeKey = "Air (Medium)";
+                if (currentSelectionText.includes("Heavy")) volumeSizeKey = "Air (Large)";
+
+                const airBtn = document.getElementById('airBuyBtn');
+                const airTagBox = document.getElementById('airStockContainer');
+
+                if (liveStock && Object.prototype.hasOwnProperty.call(liveStock, volumeSizeKey)) {
+                    const count = parseInt(liveStock[volumeSizeKey]);
+                    applyStockTags(count, airBtn, airTagBox);
+                }
+            }
+        }
+
+        function applyStockTags(count, btn, tagBox) {
+            if (!btn || !tagBox) return;
+
+            if (count <= 0 || isNaN(count)) {
+                tagBox.innerHTML = `<span class="px-2.5 py-1 rounded-lg font-mono text-[9px] bg-cyber-rose/10 border border-cyber-rose/20 text-cyber-rose tracking-wider font-extrabold uppercase">SOLD OUT</span>`;
+                btn.innerText = "OUT OF STOCK";
+                btn.className = "w-full py-3 bg-white/5 text-slate-400 rounded-xl font-mono text-xs font-bold cursor-not-allowed border border-white/5";
+                btn.disabled = true;
+            } else if (count <= 3) {
+                tagBox.innerHTML = `<span class="px-2.5 py-1 rounded-lg font-mono text-[9px] bg-amber-500/10 border border-amber-500/20 text-amber-500 tracking-wider font-extrabold uppercase">RUNNING LOW: ${count} LEFT</span>`;
+                btn.innerText = "ADD TO DOCK";
+                btn.className = "buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer";
+                btn.disabled = false;
+            } else {
+                tagBox.innerHTML = `<span class="px-2.5 py-1 rounded-lg font-mono text-[9px] bg-cyber-accent/10 border border-cyber-accent/20 text-cyber-accent tracking-wider font-extrabold uppercase">SECURE: ${count} AVAILABLE</span>`;
+                btn.innerText = "ADD TO DOCK";
+                btn.className = "buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer";
+                btn.disabled = false;
+            }
+        }
+
+        // --- Clothing & Accessory Grid Router ---
+        function changeClothingPage(pageNum) {
+            activeClothingPage = pageNum;
+            
+            const tabs = [1, 2, 3];
+            tabs.forEach(t => {
+                const element = document.getElementById(`clothing-tab-${t}`);
+                if (element) {
+                    if (t === pageNum) {
+                        element.className = "px-4 py-2.5 rounded-xl border border-cyber-accent/30 bg-cyber-accent/10 text-cyber-accent tracking-wider font-extrabold hover:text-white transition-all";
+                    } else {
+                        element.className = "px-4 py-2.5 rounded-xl border border-white/5 bg-white/5 tracking-wider font-slate-400 hover:text-white transition-all";
+                    }
+                }
+            });
+
+            renderClothingCatalog();
+        }
+
+        function renderClothingCatalog() {
+            const grid = document.getElementById('clothingGrid');
+            grid.innerHTML = '';
+
+            const filtered = catalogBlueprint.filter(item => item.group === 'clothing' || item.group === 'accessories');
+            const pageFiltered = filtered.filter(item => item.page === activeClothingPage);
+
+            pageFiltered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "product-card cyber-glass rounded-3xl p-6 border border-white/5 hover:border-cyber-accent/30 flex flex-col justify-between group transition-all duration-300";
+                card.setAttribute('data-product-name', item.name);
+
+                let mediaBlock = '';
+                if (item.isMugSlider) {
+                    // Custom interactive slideshow for multi-design mugs
+                    const mugImages = ["mug 1.png", "mug 2.png", "mug 3.png"];
+                    const currentImg = mugImages[selectedMugIndex];
+                    mediaBlock = `
+                        <div class="relative w-full h-48 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center justify-center overflow-hidden">
+                            <div class="flex-1 w-full h-full flex items-center justify-center p-4 relative">
+                                <span class="absolute text-5xl opacity-20 select-none">${item.fallbackEmoji || '☕'}</span>
+                                <img src="${currentImg}" onerror="this.style.opacity='0'" class="absolute max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-105 transition-opacity duration-300 z-10">
+                            </div>
+                            <!-- Slides indicators -->
+                            <div class="flex gap-1 mb-3 z-20">
+                                <button onclick="setMugSlide(0, event)" class="w-2 h-2 rounded-full ${selectedMugIndex === 0 ? 'bg-cyber-accent' : 'bg-white/20'} transition-all"></button>
+                                <button onclick="setMugSlide(1, event)" class="w-2 h-2 rounded-full ${selectedMugIndex === 1 ? 'bg-cyber-accent' : 'bg-white/20'} transition-all"></button>
+                                <button onclick="setMugSlide(2, event)" class="w-2 h-2 rounded-full ${selectedMugIndex === 2 ? 'bg-cyber-accent' : 'bg-white/20'} transition-all"></button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Modern HUD graphics block 
+                    mediaBlock = `
+                        <div class="relative w-full h-48 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center overflow-hidden p-4">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent)]"></div>
+                            <span class="absolute text-5xl opacity-20 select-none">${item.fallbackEmoji || '🛍️'}</span>
+                            <img src="${item.img || ''}" onerror="this.style.opacity='0'" class="absolute max-h-[85%] max-w-[85%] object-contain transform group-hover:scale-105 transition-opacity duration-300 z-10">
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        ${mediaBlock}
+                        <h3 class="mt-5 text-lg font-bold font-mono tracking-tight group-hover:text-cyber-accent transition-colors">${item.name}</h3>
+                        <p class="text-sm font-bold text-slate-400 mt-1">£${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="mt-6 space-y-4">
+                        <div class="stock-tag-container text-center"></div>
+                        <button onclick="addItemToCart('${item.name}', ${item.price})" class="buy-btn w-full py-3 bg-cyber-accent text-[#030303] hover:brightness-110 rounded-xl font-mono text-xs font-bold transition-all">
+                            ADD TO DOCK
+                        </button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            applyStockUIToPage();
+        }
+
+        function setMugSlide(index, event) {
+            event.stopPropagation();
+            selectedMugIndex = index;
+            renderClothingCatalog();
+            showHUDNotification('MOCKUP DOCK', `Mug Layout Design [0${index + 1}] selected.`, 'info');
+        }
+
+        // --- Atmospheric Air variant helper ---
+        function addAirToCart() {
+            const dropdown = document.getElementById('airSize');
+            const sizeLabel = dropdown.options[dropdown.selectedIndex].text.split(' - ')[0];
+            const price = parseFloat(dropdown.value);
+            const canonicalName = `Air (${sizeLabel})`;
+            addItemToCart(canonicalName, price);
+        }
+
+        // --- Shopping Cart Action Logic ---
+        function toggleCartSidebar(open) {
+            const sidebar = document.getElementById('cartSidebar');
+            if (open) {
+                sidebar.classList.remove('translate-x-full');
+            } else {
+                sidebar.classList.add('translate-x-full');
+            }
+        }
+
+        function addItemToCart(name, price) {
+            // Verify stock
+            const stockLimit = liveStock[name] !== undefined ? liveStock[name] : 0;
+            const existing = cart.find(x => x.name === name);
+            const currentCount = existing ? existing.quantity : 0;
+
+            if (currentCount >= stockLimit) {
+                showHUDNotification('INSUFFICIENT ACCESS', `Unable to reserve additional ${name}. Stock ceiling reached.`, 'error');
+                return;
+            }
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+
+            saveAndSyncCart();
+            showHUDNotification('DOCK RESERVED', `Added ${name} to your containment dock.`, 'success');
+        }
+
+        // --- Shopping Cart Modification Logic ---
+        function adjustCartQuantity(name, amount) {
+            const item = cart.find(x => x.name === name);
+            if (!item) return;
+
+            if (amount > 0) {
+                const limit = liveStock[name] !== undefined ? liveStock[name] : 99;
+                if (item.quantity >= limit) {
+                    showHUDNotification('INSUFFICIENT ACCESS', `Live catalog limit reached for ${name}.`, 'error');
+                    return;
+                }
+                item.quantity += 1;
+            } else {
+                item.quantity -= 1;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(x => x.name !== name);
+                }
+            }
+
+            saveAndSyncCart();
+        }
+
+        function removeCartItem(name) {
+            cart = cart.filter(x => x.name !== name);
+            saveAndSyncCart();
+            showHUDNotification('CONTAINMENT CLEARED', `Removed ${name} from your dock.`, 'info');
+        }
+
+        function saveAndSyncCart() {
+            localStorage.setItem('roryx-cart', JSON.stringify(cart));
+            renderCartUI();
+        }
+
+        function renderCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            container.innerHTML = '';
+
+            let totalUnits = 0;
+            let totalValue = 0;
+
+            cart.forEach(item => {
+                totalUnits += item.quantity;
+                totalValue += (item.price * item.quantity);
+
+                const itemImg = getProductImage(item.name);
+                const matchingBlueprint = catalogBlueprint.find(x => x.name === item.name);
+                const fallbackSymbol = matchingBlueprint ? matchingBlueprint.fallbackEmoji : '📦';
+
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-4 rounded-2xl bg-[#030303] border border-white/5";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center p-1.5 shrink-0 overflow-hidden relative">
+                            <span class="absolute text-xs opacity-30 select-none">${fallbackSymbol}</span>
+                            <img src="${itemImg}" onerror="this.style.opacity='0'" class="absolute max-h-full max-w-full object-contain z-10 transition-opacity">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="text-xs font-bold font-mono tracking-tight text-white">${item.name}</div>
+                            <div class="text-[10px] text-slate-400 font-mono">£${item.price.toFixed(2)} each</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2 border border-white/10 rounded-lg p-1 bg-white/5">
+                            <button onclick="adjustCartQuantity('${item.name}', -1)" class="w-5 h-5 text-xs text-slate-400 hover:text-white font-bold">-</button>
+                            <span class="text-xs font-mono font-bold text-white">${item.quantity}</span>
+                            <button onclick="adjustCartQuantity('${item.name}', 1)" class="w-5 h-5 text-xs text-slate-400 hover:text-white font-bold">+</button>
+                        </div>
+                        <button onclick="removeCartItem('${item.name}')" class="text-xs font-mono font-bold text-cyber-rose">REMOVE</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-48 flex flex-col items-center justify-center text-center space-y-2 text-slate-500">
+                        <span class="text-3xl">🏜️</span>
+                        <p class="text-xs font-mono">RESERVATION DOCK VACANT</p>
+                    </div>
+                `;
+            }
+
+            document.getElementById('cartCountBadge').innerText = totalUnits;
+            document.getElementById('cartCountLabel').innerText = totalUnits;
+            document.getElementById('cartTotalLabel').innerText = "£" + totalValue.toFixed(2);
+        }
+
+        // --- Interactive Checkout Gateway ---
+        function checkoutCart() {
+            if (cart.length === 0) {
+                showHUDNotification('EMPTY TERMINAL', 'Add components to checkout.', 'error');
+                return;
+            }
+
+            toggleCartSidebar(false);
+            
+            // Focus on Checkout
+            navigateTo('pay');
+
+            // Formulate order summaries
+            let summaryName = cart.map(x => `${x.quantity}x ${x.name}`).join(' + ');
+            let sumPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            activePaymentProduct = {
+                name: summaryName,
+                price: sumPrice
+            };
+
+            document.getElementById('checkoutItemName').innerText = summaryName;
+            document.getElementById('checkoutItemPrice').innerText = "£" + sumPrice.toFixed(2);
+            document.getElementById('checkoutItemLabel').innerText = "VIRTUAL CONSOLIDATION GROUP";
+        }
+
+        // --- Promo discount code validator ---
+        function checkDiscountCode() {
+            const code = document.getElementById('discountCode').value.trim().toUpperCase();
+            const msg = document.getElementById('discountMessage');
+            
+            if (!activePaymentProduct) return;
+
+            if (code === "FREE10") {
+                msg.innerText = "PROMO VALID: 100% OFF APPLIED";
+                msg.className = "text-xs font-mono font-bold text-cyber-accent mt-2";
+                msg.style.display = "block";
+                document.getElementById('checkoutItemPrice').innerText = "£0.00";
+            } else if (code === "") {
+                msg.style.display = "none";
+                document.getElementById('checkoutItemPrice').innerText = "£" + activePaymentProduct.price.toFixed(2);
+            } else {
+                msg.innerText = "PROMO NOT RECOGNIZED";
+                msg.className = "text-xs font-mono font-bold text-cyber-rose mt-2";
+                msg.style.display = "block";
+                document.getElementById('checkoutItemPrice').innerText = "£" + activePaymentProduct.price.toFixed(2);
+            }
+        }
+
+        // --- Submit Payments Order Processor ---
+        async function startPayment(provider) {
+            const first = document.getElementById('fName').value.trim();
+            const last = document.getElementById('lName').value.trim();
+            const group = document.getElementById('tutor').value.trim();
+            const code = document.getElementById('discountCode').value.trim().toUpperCase();
+
+            if (!first || !last || !group) {
+                showHUDNotification('FIELD INCOMPLETE', 'Fill in matching user signatures to authorize order.', 'error');
+                return;
+            }
+
+            let finalPrice = activePaymentProduct ? activePaymentProduct.price : 0;
+            if (code === "FREE10") {
+                finalPrice = 0;
+            }
+
+            const payload = {
+                customer: `${first} ${last}`,
+                tutor: group,
+                item: activePaymentProduct ? activePaymentProduct.name : 'Unknown Product Bundle',
+                price: "£" + finalPrice.toFixed(2),
+                method: code === "FREE10" ? `${provider} (Promo FREE10)` : provider,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+
+            showHUDNotification('SYNCHRONIZING', 'Deploying transaction logs...', 'info');
+
+            try {
+                // Post order to live production database
+                const response = await fetch('/api/submit-orders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Fallback operational logs');
+                }
+            } catch (err) {
+                // local fallback simulation
+                const localOrders = localStorage.getItem('roryx-orders') ? JSON.parse(localStorage.getItem('roryx-orders')) : [];
+                localOrders.push(payload);
+                localStorage.setItem('roryx-orders', JSON.stringify(localOrders));
+
+                // Subtract from simulated stock
+                cart.forEach(item => {
+                    if (liveStock[item.name]) {
+                        liveStock[item.name] = Math.max(0, liveStock[item.name] - item.quantity);
+                    }
+                });
+                localStorage.setItem('roryx-livestock', JSON.stringify(liveStock));
+            }
+
+            // Fire Discord webhook logging
+            try {
+                await fetch("https://discord.com/api/webhooks/1508062425063231511/4t2kU_Xi8gZZ0ZUmZkrC_BIABXcCYpq2f8ySjGezxaNaFY2bSzUs4pNZFjkxujl0QWby", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "💵 New Direct Order Registered",
+                            color: 3458880,
+                            fields: [
+                                { name: "Client", value: payload.customer, inline: true },
+                                { name: "Tutor Group", value: payload.tutor, inline: true },
+                                { name: "Bundle Details", value: payload.item },
+                                { name: "Total Sum", value: payload.price, inline: true },
+                                { name: "Method", value: payload.method, inline: true }
+                            ],
+                            footer: { text: "RORY X SECURE ARCHIVE DOCK" }
+                        }]
+                    })
+                });
+            } catch (discordErr) {
+                console.log("Silent fallback, Discord endpoint protected.");
+            }
+
+            // Success feedback
+            showHUDNotification('TRANSACTION LOCKED', 'Your reservation was submitted successfully!', 'success');
+            
+            // Clear cart
+            cart = [];
+            saveAndSyncCart();
+            checkLiveStock();
+
+            // Direct route back with confirmation summary
+            setTimeout(() => {
+                navigateTo('home');
+                showHUDNotification('COMPLETION ADVISORY', finalPrice === 0 ? 'Your free promotional order is locked and ready!' : 'Deliver exact cash payment on school premises to complete transaction.', 'success');
+            }, 1000);
+        }
+
+        // --- Admin Console Operations ---
+        function attemptAdminLogin() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            
+            const authorizedEmails = [
+                "Oliver.Balint.roryxteam@hotmail.com",
+                "Kyen.Ellis.roryxteam@hotmail.com",
+                "Rory.H.roryxteam@hotmail.com",
+                "Admin.roryx@hotmail.com"
+            ];
+            
+            if (authorizedEmails.includes(email) && password === "Roryx2026") {
+                document.getElementById('adminGate').classList.add('hidden');
+                document.getElementById('adminPanel').classList.remove('hidden');
+                showHUDNotification('ACCESS SIGNATURE DETECTED', 'Operator Dashboard successfully unlocked.', 'success');
+                
+                renderAdminStockManager();
+                loadAdminOrderHUD();
+            } else {
+                const errMsg = document.getElementById('adminErrorMsg');
+                errMsg.innerText = "ACCESS DENIED: SIGNATURE INCORRECT. CONTACT DIVISION ADVISORS.";
+                errMsg.classList.remove('hidden');
+                showHUDNotification('SECURITY EXCEPTION', 'Portal entry rejected.', 'error');
+            }
+        }
+
+        // --- Portal Exit and Panel Logout handlers ---
+        function logoutAdmin() {
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('adminGate').classList.remove('hidden');
+            document.getElementById('adminPassword').value = '';
+            showHUDNotification('SECURE SHUTDOWN', 'Operator Dashboard locked.', 'info');
+        }
+
+        function renderAdminStockManager() {
+            const dispensary = document.getElementById('admin-dispensary');
+            const clothing = document.getElementById('admin-clothing');
+            const merch = document.getElementById('admin-merch');
+
+            dispensary.innerHTML = '';
+            clothing.innerHTML = '';
+            merch.innerHTML = '';
+
+            catalogBlueprint.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-3 rounded-xl bg-[#030303] border border-white/5";
+                
+                const uniqueId = `admin_stock_${btoa(item.name).replace(/=/g, '')}`;
+                const currentVal = liveStock[item.name] !== undefined ? liveStock[item.name] : item.defaultStock;
+
+                div.innerHTML = `
+                    <span class="text-xs font-mono font-bold text-slate-300">${item.name}</span>
+                    <input type="number" min="0" max="999" id="${uniqueId}" value="${currentVal}" class="w-20 px-2 py-1.5 rounded bg-[#0a0a0c] text-xs font-mono text-center text-white border border-white/10 outline-none focus:border-cyber-accent">
+                `;
+
+                if (item.group === 'shop') {
+                    dispensary.appendChild(div);
+                } else if (item.group === 'clothing') {
+                    clothing.appendChild(div);
+                } else {
+                    merch.appendChild(div);
+                }
+            });
+        }
+
+        async function saveInventorySettings(event) {
+            event.preventDefault();
+            
+            let updateMap = {};
+            catalogBlueprint.forEach(item => {
+                const uniqueId = `admin_stock_${btoa(item.name).replace(/=/g, '')}`;
+                const element = document.getElementById(uniqueId);
+                if (element) {
+                    updateMap[item.name] = parseInt(element.value) || 0;
+                }
+            });
+
+            try {
+                const response = await fetch('/api/update-stock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateMap)
+                });
+                if (!response.ok) throw new Error('Live database re-route');
+                showHUDNotification('SYSTEM SYNCED', 'Live database records updated.', 'success');
+            } catch (err) {
+                // Simulated fallback
+                localStorage.setItem('roryx-livestock', JSON.stringify(updateMap));
+                liveStock = updateMap;
+                showHUDNotification('SIMULATED SYNC', 'Local containment parameters saved.', 'info');
+            }
+
+            checkLiveStock();
+        }
+
+        async function resetStockDefaults() {
+            if (confirm("Restore original production defaults? Current settings will be overwritten.")) {
+                let defaultMap = {};
+                catalogBlueprint.forEach(item => {
+                    defaultMap[item.name] = item.defaultStock;
+                });
+
+                try {
+                    await fetch('/api/update-stock', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(defaultMap)
+                    });
+                } catch (err) {
+                    localStorage.setItem('roryx-livestock', JSON.stringify(defaultMap));
+                    liveStock = defaultMap;
+                }
+
+                showHUDNotification('RESTORED', 'Factory inventory thresholds established.', 'info');
+                renderAdminStockManager();
+                checkLiveStock();
+            }
+        }
+
+        async function loadAdminOrderHUD() {
+            const table = document.getElementById('adminOrderList');
+            table.innerHTML = '';
+
+            try {
+                const response = await fetch('/api/get-orders?t=' + Date.now());
+                if (response.ok) {
+                    databaseOrders = await response.json();
+                } else {
+                    throw new Error('Simulation loaded');
+                }
+            } catch (err) {
+                const localOrders = localStorage.getItem('roryx-orders');
+                databaseOrders = localOrders ? JSON.parse(localOrders) : [];
+            }
+
+            if (databaseOrders.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="py-8 text-center text-slate-500 text-[10px]">NO COMMITTED TRANSACTIONS REGISTERED</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            databaseOrders.slice().reverse().forEach(o => {
+                table.innerHTML += `
+                    <tr class="border-b border-white/5 hover:bg-white/5 transition-all text-slate-300">
+                        <td class="py-3 px-2">
+                            <div class="font-bold text-white">${o.customer || 'Anonymous'}</div>
+                        </td>
+                        <td class="py-3 px-2">
+                            <div class="max-w-[200px] truncate text-slate-400" title="${o.item}">${o.item || 'Generic bundle'}</div>
+                            <div class="text-[10px] text-cyber-accent font-mono">${o.price || '£0.00'} [${o.method || 'CASH'}]</div>
+                        </td>
+                        <td class="py-3 px-2 text-slate-400">${o.tutor || '8HMR'}</td>
+                        <td class="py-3 px-2 text-right text-[10px] text-slate-500">${o.time || '--:--'}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function handleClearLogs() {
+            if (confirm('Deploy server override to delete all historical records? This is non-reversible.')) {
+                try {
+                    await fetch('/api/clear-orders', { method: 'POST' });
+                } catch (err) {
+                    localStorage.removeItem('roryx-orders');
+                }
+                showHUDNotification('HISTORY PURGED', 'Transaction files successfully zeroed out.', 'info');
+                loadAdminOrderHUD();
+            }
+        }
+
+        // --- System Lifecycle Init ---
+        document.addEventListener("DOMContentLoaded", () => {
+            setupMatrixParticles();
+
+            // Client Theme Load
+            const savedTheme = localStorage.getItem('roryx-theme');
+            const logo = document.getElementById('navLogo');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                if(logo) logo.src = "roryxlite.png";
+                document.getElementById('themeBtn').innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+                `;
+            } else {
+                if(logo) logo.src = "RoryX.png";
+            }
+
+            // Sync Cart State 
+            const cachedCart = localStorage.getItem('roryx-cart');
+            if (cachedCart) {
+                cart = JSON.parse(cachedCart);
+            }
+
+            // Sync dynamic grids
+            renderCartUI();
+            checkLiveStock();
+            changeClothingPage(1);
+            navigateTo('home');
+
+            // Set background stock polling
+            setInterval(checkLiveStock, 5000);
+        });
+    </script>
+</body>
+</html>
